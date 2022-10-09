@@ -1,0 +1,70 @@
+# modules/apigateway/template.yaml
+AWSTemplateFormatVersion: '2010-09-09'
+Transform: AWS::Serverless-2016-10-31
+Description: >-
+  This stack contains a API Gateway resource
+Parameters:
+  ApiGatewayName:
+    Type: String
+    Description: "API Gateway name"
+  ApiGatewayDescription:
+    Type: String
+    Description: "API Gateway description"
+  CorsAllowOrigins:
+    Type: String
+    Description: "CORS Allow Origins"
+  UserPoolArn:
+    Type: String
+    Description: "User Pool ARN"
+  LambdaFunctionArn:
+    Type: String
+    Description: "Lambda Function ARN"
+  LambdaAliasName:
+    Type: String
+    Description: "Lambda Alias Function"
+Resources:
+
+  LambdaFunctionPermissionFromAPI:
+    Type: AWS::Lambda::Permission
+    Properties:
+      Action: lambda:InvokeFunction
+      FunctionName: !Join
+        - ":"
+        - - !Ref LambdaFunctionArn
+          - !Ref LambdaAliasName
+      Principal: apigateway.amazonaws.com
+      SourceArn: !Join
+        - ""
+        - - "arn:aws:execute-api:"
+          - !Ref AWS::Region
+          - ":"
+          - !Ref AWS::AccountId
+          - ":"
+          - !Ref ApiGateway
+          - /*
+
+  ApiGateway:
+    Type: AWS::Serverless::Api
+    Properties:
+      Name: !Ref ApiGatewayName
+      Description: !Ref ApiGatewayDescription
+      EndpointConfiguration:
+        Type: REGIONAL
+      OpenApiVersion: "3.0.1"
+      StageName: "dev"
+      Cors:
+        AllowMethods: "'OPTIONS,GET,POST,PATCH,DELETE'"
+        AllowHeaders: "'Content-Type,Authorization'"
+        AllowOrigin: !Ref CorsAllowOrigins
+        MaxAge: "'600'"
+      DefinitionBody:
+        Fn::Transform:
+          Name: "AWS::Include"
+          Parameters:
+            Location: swagger.yaml
+      Auth:
+        Authorizers:
+          CognitoAuth:
+            UserPoolArn: !Ref UserPoolArn
+            AuthorizationScopes:
+              - B2BIdentifier/ApproveChristmasMarkets

@@ -1,0 +1,53 @@
+AWSTemplateFormatVersion: '2010-09-09'
+Transform: AWS::Serverless-2016-10-31
+Description: >-
+  This stack sub-stacks in order to create a serverless decoupled architecture
+Resources:
+  DynamoDBStore:
+    Type: AWS::CloudFormation::Stack
+    Properties:
+      TemplateURL: modules/dynamodb/template.yaml
+      Parameters:
+        DynamoDBWCU: 1
+        DynamoDBRCU: 1
+        DynamoDBTableName: "CHRISTMAS_MARKET_DATA_STORE"
+        DynamoDBPartitionKeyName: "userId"
+        DynamoDBRangeKeyName: "marketId"
+        DynamoDBGSIName: "city"
+  IAM:
+    Type: AWS::CloudFormation::Stack
+    Properties:
+      TemplateURL: modules/iam/template.yaml
+      Parameters:
+        DynamoDBTableName: "CHRISTMAS_MARKET_DATA_STORE"
+  LambdaManager:
+    Type: AWS::CloudFormation::Stack
+    Properties:
+      TemplateURL: modules/lambda/template.yaml
+      Parameters:
+        LambdaName: "ChristmasMarketManager"
+        LambdaDescription: "ChristmasMarket manager handles the CRUD APIs of B2C & B2B"
+        LambdaTimeout: 30
+        LambdaMemorySize: 128
+        LambdaSourceCodePath: "../../../src/ChristmasMarketManager"
+        LambdaAliasName: "dev"
+        ExecutionRoleArn: !GetAtt IAM.Outputs.LambdaExecutionRoleArn
+        DynamoDBTableName: "CHRISTMAS_MARKET_DATA_STORE"
+  CognitoUserPool:
+    Type: AWS::CloudFormation::Stack
+    Properties:
+      TemplateURL: modules/cognito/template.yaml
+      Parameters:
+        UserPoolName: "CHRISTMAS_MARKET_USER_POOLS"
+        DomainName: "markets-guide"
+  ApiGateway:
+    Type: AWS::CloudFormation::Stack
+    Properties:
+      TemplateURL: modules/apigateway/template.yaml
+      Parameters:
+        ApiGatewayName: "CHRISTMAS_MARKET_API"
+        ApiGatewayDescription: "Contains the B2C & B2B APIs"
+        CorsAllowOrigins: "'*'" ## For production use specify the domain
+        LambdaAliasName: "dev"
+        UserPoolArn: !GetAtt CognitoUserPool.Outputs.UserPoolArn
+        LambdaFunctionArn: !GetAtt LambdaManager.Outputs.ManagerLambdaFunctionArn

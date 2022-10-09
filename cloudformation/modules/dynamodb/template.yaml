@@ -1,0 +1,56 @@
+# modules/dynamodb/template.yaml
+AWSTemplateFormatVersion: '2010-09-09'
+Transform: AWS::Serverless-2016-10-31
+Description: >-
+  This stack contains a dynamodb resource
+Parameters:
+  DynamoDBWCU:
+    Type: Number
+    Description: "Write capacity units"
+  DynamoDBRCU:
+    Type: Number
+    Description: "Write capacity units"
+  DynamoDBTableName:
+    Type: String
+    Description: "DynamoDB table name"
+  DynamoDBPartitionKeyName:
+    Type: String
+    Description: "DynamoDB Partition Key"
+  DynamoDBRangeKeyName:
+    Type: String
+    Description: "DynamoDB Range Key"
+  DynamoDBGSIName:
+    Type: String
+    Description: Global secondary index name
+Resources:
+  DynamoTableDataStore:
+    Type: AWS::DynamoDB::Table
+    Properties:
+      TableName: !Ref DynamoDBTableName
+      AttributeDefinitions:
+        - AttributeName: !Ref DynamoDBPartitionKeyName
+          AttributeType: "S"
+        - AttributeName: !Ref DynamoDBRangeKeyName
+          AttributeType: "S"
+        - AttributeName: !Ref DynamoDBGSIName
+          AttributeType: "S"
+      KeySchema:
+        - AttributeName: !Ref DynamoDBPartitionKeyName
+          KeyType: "HASH"
+        - AttributeName: !Ref DynamoDBRangeKeyName
+          KeyType: "RANGE"
+      GlobalSecondaryIndexes:
+        - 
+          IndexName: !Ref DynamoDBGSIName
+          KeySchema:
+            - 
+              AttributeName: !Ref DynamoDBGSIName
+              KeyType: "HASH"
+          Projection:
+            ProjectionType: KEYS_ONLY
+          ProvisionedThroughput: 
+            ReadCapacityUnits: !Ref DynamoDBRCU
+            WriteCapacityUnits: !Ref DynamoDBWCU
+      ProvisionedThroughput:
+        ReadCapacityUnits: !Ref DynamoDBRCU
+        WriteCapacityUnits: !Ref DynamoDBWCU

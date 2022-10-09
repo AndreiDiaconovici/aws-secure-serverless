@@ -1,0 +1,617 @@
+openapi: 3.0.1
+info:
+  title: Swagger Christmas Markets
+  description: 'This swagger describes the API which will be used to handle christmas-markets from B2B and B2C'
+  version: 1.0.0
+tags:
+- name: B2B
+- name: B2C
+paths:
+  /v1/b2b/christmas-markets/city/{city}:
+    options:
+      parameters:
+        - in: path
+          name: city
+          required: true
+          schema:
+            type: string
+      tags:
+      - B2B
+      responses:
+        200:
+          description: Response for CORS method
+          headers:
+            Access-Control-Allow-Headers:
+              schema:
+                type: string
+            Access-Control-Allow-Methods:
+              schema:
+                type: string
+            Access-Control-Allow-Origin:
+              schema:
+                type: string
+      x-amazon-apigateway-integration:
+        type: mock
+        requestTemplates:
+          application/json: '{"statusCode" : 200 }'
+        responses:
+          default:
+            statusCode: '200'
+            responseParameters:
+              method.response.header.Access-Control-Allow-Headers: "'Content-Type,Authorization'"
+              method.response.header.Access-Control-Allow-Methods: "'OPTIONS,GET,POST,PATCH,DELETE'"
+              method.response.header.Access-Control-Allow-Origin:
+                Fn::Sub: ${CorsAllowOrigins}
+            responseTemplates:
+              application/json: {}
+
+    get:
+      tags:
+      - B2B
+      summary: Third party get christmas-markets
+      parameters:
+        - in: header
+          name: Authorization
+          required: true
+          schema:
+            type: string
+        - in: path
+          name: city
+          required: true
+          schema:
+            type: string
+      responses:
+        200:
+          description: Get Christmas Markets
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/GetB2BSuccessApiResponse'
+        400:
+          description: Invalid Request Parameter
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorApiResponse'
+        401:
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorApiResponse'
+        403:
+          description: Forbidden
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorApiResponse'
+        500:
+          description: Internal Server Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorApiResponse'
+      security:
+        - CognitoAuth: 
+          - B2BIdentifier/ApproveChristmasMarkets
+      x-amazon-apigateway-integration:
+        type: aws_proxy
+        contentHandling: CONVERT_TO_TEXT
+        httpMethod: POST
+        passthroughBehavior: when_no_match
+        uri: 
+          Fn::Sub: arn:aws:apigateway:${AWS::Region}:lambda:path/2015-03-31/functions/${LambdaFunctionArn}:${LambdaAliasName}/invocations
+  /v1/b2b/christmas-markets/{marketId}/user/{userId}:
+    options:
+      tags:
+      - B2B
+      parameters:
+        - in: path
+          name: marketId
+          required: true
+          schema:
+            type: string
+        - in: path
+          name: userId
+          required: true
+          schema:
+            type: string
+      responses:
+        200:
+          description: Response for CORS method
+          headers:
+            Access-Control-Allow-Headers:
+              schema:
+                type: string
+            Access-Control-Allow-Methods:
+              schema:
+                type: string
+            Access-Control-Allow-Origin:
+              schema:
+                type: string
+      x-amazon-apigateway-integration:
+        type: mock
+        requestTemplates:
+          application/json: '{"statusCode" : 200 }'
+        responses:
+          default:
+            statusCode: '200'
+            responseParameters:
+              method.response.header.Access-Control-Allow-Headers: "'Content-Type,Authorization'"
+              method.response.header.Access-Control-Allow-Methods: "'OPTIONS,GET,POST,PATCH,DELETE'"
+              method.response.header.Access-Control-Allow-Origin:
+                Fn::Sub: ${CorsAllowOrigins}
+            responseTemplates:
+              application/json: {}
+
+    patch:
+      tags:
+      - B2B
+      summary: Third party update christmas-markets
+      parameters:
+        - in: header
+          name: Authorization
+          required: true
+          schema:
+            type: string
+        - in: path
+          name: marketId
+          required: true
+          schema:
+            type: string
+        - in: path
+          name: userId
+          required: true
+          schema:
+            type: string
+      requestBody:
+        description: Event Object
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ApproveChristmasMarket'
+      responses:
+        200:
+          description: Get Christmas Markets
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/SuccessApiResponse'
+        400:
+          description: Invalid Request Parameter
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorApiResponse'
+        401:
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorApiResponse'
+        403:
+          description: Forbidden
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorApiResponse'
+        500:
+          description: Internal Server Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorApiResponse'
+      security:
+        - CognitoAuth: 
+          - B2BIdentifier/ApproveChristmasMarkets
+      x-amazon-apigateway-integration:
+        type: aws_proxy
+        contentHandling: CONVERT_TO_TEXT
+        httpMethod: POST
+        passthroughBehavior: when_no_match
+        uri: 
+          Fn::Sub: arn:aws:apigateway:${AWS::Region}:lambda:path/2015-03-31/functions/${LambdaFunctionArn}:${LambdaAliasName}/invocations
+
+  /v1/b2c/christmas-markets/user/{userId}:
+    options:
+      tags:
+      - B2C
+      parameters:
+        - in: path
+          name: userId
+          required: true
+          schema:
+            type: string
+      responses:
+        200:
+          description: Response for CORS method
+          headers:
+            Access-Control-Allow-Headers:
+              schema:
+                type: string
+            Access-Control-Allow-Methods:
+              schema:
+                type: string
+            Access-Control-Allow-Origin:
+              schema:
+                type: string
+      x-amazon-apigateway-integration:
+        type: mock
+        requestTemplates:
+          application/json: '{"statusCode" : 200 }'
+        responses:
+          default:
+            statusCode: '200'
+            responseParameters:
+              method.response.header.Access-Control-Allow-Headers: "'Content-Type,Authorization'"
+              method.response.header.Access-Control-Allow-Methods: "'OPTIONS,GET,POST,PATCH,DELETE'"
+              method.response.header.Access-Control-Allow-Origin:
+                Fn::Sub: ${CorsAllowOrigins}
+            responseTemplates:
+              application/json: {}
+
+    get:
+      tags:
+      - B2C
+      summary: Clients get christmas-markets
+      parameters:
+        - in: header
+          name: Authorization
+          required: true
+          schema:
+            type: string
+        - in: path
+          name: userId
+          required: true
+          schema:
+            type: string
+      responses:
+        200:
+          description: Get Christmas Markets
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/GetB2BSuccessApiResponse'
+        400:
+          description: Invalid Request Parameter
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorApiResponse'
+        401:
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorApiResponse'
+        403:
+          description: Forbidden
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorApiResponse'
+        500:
+          description: Internal Server Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorApiResponse'
+      security:
+        - CognitoAuth: []
+      x-amazon-apigateway-integration:
+        type: aws_proxy
+        contentHandling: CONVERT_TO_TEXT
+        httpMethod: POST
+        passthroughBehavior: when_no_match
+        uri: 
+          Fn::Sub: arn:aws:apigateway:${AWS::Region}:lambda:path/2015-03-31/functions/${LambdaFunctionArn}:${LambdaAliasName}/invocations
+    post:
+      tags:
+      - B2C
+      summary: Clients post christmas-markets
+      parameters:
+        - in: path
+          name: userId
+          required: true
+          schema:
+            type: string
+        - in: header
+          name: Authorization
+          required: true
+          schema:
+            type: string
+      requestBody:
+        description: Event Object
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/PostChristmasMarket'
+      responses:
+        200:
+          description: Get Christmas Markets
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ChristmasMarket'
+        400:
+          description: Invalid Request Parameter
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorApiResponse'
+        401:
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorApiResponse'
+        403:
+          description: Forbidden
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorApiResponse'
+        500:
+          description: Internal Server Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorApiResponse'
+      security:
+        - CognitoAuth: []
+      x-amazon-apigateway-integration:
+        type: aws_proxy
+        contentHandling: CONVERT_TO_TEXT
+        httpMethod: POST
+        passthroughBehavior: when_no_match
+        uri: 
+          Fn::Sub: arn:aws:apigateway:${AWS::Region}:lambda:path/2015-03-31/functions/${LambdaFunctionArn}:${LambdaAliasName}/invocations
+
+  /v1/b2c/christmas-markets/{marketId}/user/{userId}:
+    options:
+      tags:
+      - B2C
+      parameters:
+        - in: path
+          name: marketId
+          required: true
+          schema:
+            type: string
+        - in: path
+          name: userId
+          required: true
+          schema:
+            type: string
+      responses:
+        200:
+          description: Response for CORS method
+          headers:
+            Access-Control-Allow-Headers:
+              schema:
+                type: string
+            Access-Control-Allow-Methods:
+              schema:
+                type: string
+            Access-Control-Allow-Origin:
+              schema:
+                type: string
+      x-amazon-apigateway-integration:
+        type: mock
+        requestTemplates:
+          application/json: '{"statusCode" : 200 }'
+        responses:
+          default:
+            statusCode: '200'
+            responseParameters:
+              method.response.header.Access-Control-Allow-Headers: "'Content-Type,Authorization'"
+              method.response.header.Access-Control-Allow-Methods: "'OPTIONS,GET,POST,PATCH,DELETE'"
+              method.response.header.Access-Control-Allow-Origin:
+                Fn::Sub: ${CorsAllowOrigins}
+            responseTemplates:
+              application/json: {}
+    patch:
+      tags:
+      - B2C
+      summary: Clients patch christmas-markets
+      parameters:
+        - in: header
+          name: Authorization
+          required: true
+          schema:
+            type: string
+        - in: path
+          name: marketId
+          required: true
+          schema:
+            type: string
+        - in: path
+          name: userId
+          required: true
+          schema:
+            type: string
+      requestBody:
+        description: Event Object
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/PatchChristmasMarket'
+      responses:
+        200:
+          description: Get Christmas Markets
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/SuccessApiResponse'
+        400:
+          description: Invalid Request Parameter
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorApiResponse'
+        401:
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorApiResponse'
+        403:
+          description: Forbidden
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorApiResponse'
+        500:
+          description: Internal Server Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorApiResponse'
+      security:
+        - CognitoAuth: []
+      x-amazon-apigateway-integration:
+        type: aws_proxy
+        contentHandling: CONVERT_TO_TEXT
+        httpMethod: POST
+        passthroughBehavior: when_no_match
+        uri: 
+          Fn::Sub: arn:aws:apigateway:${AWS::Region}:lambda:path/2015-03-31/functions/${LambdaFunctionArn}:${LambdaAliasName}/invocations
+    delete:
+      tags:
+      - B2C
+      summary: Clients delete christmas-markets
+      parameters:
+        - in: header
+          name: Authorization
+          required: true
+          schema:
+            type: string
+        - in: path
+          name: marketId
+          required: true
+          schema:
+            type: string
+        - in: path
+          name: userId
+          required: true
+          schema:
+            type: string
+      responses:
+        200:
+          description: Get Christmas Markets
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/SuccessApiResponse'
+        400:
+          description: Invalid Request Parameter
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorApiResponse'
+        401:
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorApiResponse'
+        403:
+          description: Forbidden
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorApiResponse'
+        500:
+          description: Internal Server Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorApiResponse'
+      security:
+        - CognitoAuth: []
+      x-amazon-apigateway-integration:
+        type: aws_proxy
+        contentHandling: CONVERT_TO_TEXT
+        httpMethod: POST
+        passthroughBehavior: when_no_match
+        uri: 
+          Fn::Sub: arn:aws:apigateway:${AWS::Region}:lambda:path/2015-03-31/functions/${LambdaFunctionArn}:${LambdaAliasName}/invocations
+components:
+  schemas:
+    PatchChristmasMarket:
+      type: object
+      properties:
+        marketName:
+          type: string
+        marketDescription:
+          type: string
+        marketAveragePrice:
+          type: number
+    PostChristmasMarket:
+      type: object
+      properties:
+        marketName:
+          type: string
+        marketDescription:
+          type: string
+        marketAveragePrice:
+          type: number
+        city:
+          type: string
+      required:
+        - marketName
+        - marketDescription
+        - marketAveragePrice
+        - city
+    ChristmasMarket:
+      type: object
+      properties:
+        userId:
+          type: string
+        marketId:
+          type: string
+        marketName:
+          type: string
+        marketDescription:
+          type: string
+        marketAveragePrice:
+          type: number
+        marketApproved:
+          type: number
+        city:
+          type: string
+    ErrorApiResponse:
+      type: object
+      properties:
+        message:
+          type: string
+    SuccessApiResponse:
+      type: object
+      properties:
+        message:
+          type: string
+    GetB2BSuccessApiResponse:
+      type: object
+      properties:
+        markets:
+          type: array
+          items:
+            $ref: '#/components/schemas/ChristmasMarket'
+    ApproveChristmasMarket:
+      type: object
+      properties:
+        approved:
+          type: boolean
+    
+    
+    
+  securitySchemes:
+    CognitoAuth:
+      type: 'apiKey'
+      name: 'Authorization'
+      in: 'header'
+      scopes:
+        - B2BIdentifier/ApproveChristmasMarkets
+      x-amazon-apigateway-authtype: 'cognito_user_pools'
+      x-amazon-apigateway-authorizer:
+        providerARNs:
+          - Fn::Ref: UserPoolArn

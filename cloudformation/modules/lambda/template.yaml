@@ -1,0 +1,51 @@
+# modules/lambda/template.yaml
+AWSTemplateFormatVersion: '2010-09-09'
+Transform: AWS::Serverless-2016-10-31
+Description: >-
+  This stack contains a lambda resource
+Parameters:
+  LambdaName:
+    Type: String
+    Description: Lambda name
+  LambdaDescription:
+    Type: String
+    Description: Lambda description
+  LambdaTimeout:
+    Type: Number
+    Description: "30 seconds"
+  LambdaMemorySize:
+    Type: Number
+    Description: "128 mb"
+  LambdaSourceCodePath:
+    Type: String
+    Description: "Source code of the lambda"
+  LambdaAliasName:
+    Type: String
+    Description: "Lambda alias name"
+  ExecutionRoleArn:
+    Type: String
+    Description: "Lambda's IAM Role ARN"
+
+  ## Lambda Environment variables
+  DynamoDBTableName:
+    Type: String
+    Description: "DynamoDB table name"
+Resources:
+  ManagerLambdaFunction:
+    Type: AWS::Serverless::Function
+    Properties:
+      Runtime: nodejs14.x
+      Handler: src/handler.handler
+      Environment:
+        Variables:
+          DynamoDBTableName: !Ref DynamoDBTableName
+      FunctionName: !Ref LambdaName
+      CodeUri: !Ref LambdaSourceCodePath
+      Role: !Ref ExecutionRoleArn
+      Description: !Ref LambdaDescription
+      AutoPublishAlias: !Ref LambdaAliasName
+      MemorySize: !Ref LambdaMemorySize
+      Timeout: !Ref LambdaTimeout
+Outputs:
+  ManagerLambdaFunctionArn:
+    Value: !GetAtt ManagerLambdaFunction.Arn

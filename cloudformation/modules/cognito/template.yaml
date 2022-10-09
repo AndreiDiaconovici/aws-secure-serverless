@@ -1,0 +1,110 @@
+# modules/cognito/template.yaml
+AWSTemplateFormatVersion: '2010-09-09'
+Transform: AWS::Serverless-2016-10-31
+Description: >-
+  This stack contains a cognito resource
+Parameters:
+  UserPoolName:
+    Type: String
+    Description: "User pool name"
+  DomainName:
+    Type: String
+    Description: "User pool domain name"
+Resources:
+  UserPool:
+    Type: AWS::Cognito::UserPool
+    Properties:
+      UserPoolName: !Ref UserPoolName
+      Policies:
+        PasswordPolicy:
+          MinimumLength: 8
+          RequireLowercase: true
+          RequireUppercase: true
+          RequireNumbers: true
+          RequireSymbols: true
+      AutoVerifiedAttributes:
+        - email
+      EmailVerificationMessage: "Here's your verification code: {####}. Please provide it inside the application."
+      EmailVerificationSubject: "subject"
+      Schema:
+        - Name: email
+          AttributeDataType: String
+          Mutable: false
+          Required: true
+        - Name: phone_number
+          AttributeDataType: String
+          Mutable: false
+          Required: false
+        - Name: given_name
+          AttributeDataType: String
+          Mutable: false
+          Required: true
+        - Name: family_name
+          AttributeDataType: String
+          Mutable: false
+          Required: true
+    
+  UserPoolDomain:
+    Type: AWS::Cognito::UserPoolDomain
+    Properties:
+      Domain: !Join
+          - ""
+          - - "domain-"
+            - !Ref DomainName
+      UserPoolId: !Ref UserPool
+
+  B2CClient:
+    Type: AWS::Cognito::UserPoolClient
+    Properties:
+      UserPoolId: !Ref UserPool
+      ClientName: !Sub "B2C.${UserPoolName}"
+      GenerateSecret: false
+      IdTokenValidity: 4
+      TokenValidityUnits:
+        IdToken: 'hours'
+      RefreshTokenValidity: 30
+      ExplicitAuthFlows:
+        - "ALLOW_USER_PASSWORD_AUTH"
+        - "ALLOW_REFRESH_TOKEN_AUTH"
+      AllowedOAuthFlows:
+        - implicit
+      AllowedOAuthFlowsUserPoolClient: true
+      AllowedOAuthScopes:
+        - email
+        - openid
+        - phone
+        - profile
+      CallbackURLs:
+        - "https://stub.callback.url"
+      SupportedIdentityProviders:
+        - "COGNITO"
+
+  B2BClient:
+    Type: AWS::Cognito::UserPoolClient
+    DependsOn:
+      - B2BUserPoolResourceServer
+    Properties:
+      ClientName: !Sub "B2B.${UserPoolName}"
+      UserPoolId: !Ref UserPool
+      GenerateSecret: true
+      RefreshTokenValidity: 30
+      AllowedOAuthFlowsUserPoolClient: true
+      ExplicitAuthFlows:
+        - "ALLOW_REFRESH_TOKEN_AUTH"
+      AllowedOAuthFlows:
+        - client_credentials
+      AllowedOAuthScopes:
+        - B2BIdentifier/ApproveChristmasMarkets
+
+  B2BUserPoolResourceServer: 
+    Type: AWS::Cognito::UserPoolResourceServer
+    Properties: 
+      UserPoolId: !Ref UserPool 
+      Identifier: "B2BIdentifier" 
+      Name: "ThirdParty" 
+      Scopes: 
+      - ScopeName: "ApproveChristmasMarkets" 
+        ScopeDescription: "Third Party Create Workshops"
+Outputs:
+  UserPoolArn:
+    Value: !GetAtt UserPool.Arn
