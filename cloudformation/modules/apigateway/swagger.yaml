@@ -576,7 +576,7 @@ components:
         marketAveragePrice:
           type: number
         marketApproved:
-          type: number
+          type: boolean
         city:
           type: string
     ErrorApiResponse:
