@@ -24,7 +24,7 @@
     "typescript": "^4.8.4"
   },
   "dependencies": {
-    "ajv": "^6.12.6",
+    "ajv": "^8.11.0",
     "uuid": "^9.0.0",
     "winston": "^3.8.2"
   },

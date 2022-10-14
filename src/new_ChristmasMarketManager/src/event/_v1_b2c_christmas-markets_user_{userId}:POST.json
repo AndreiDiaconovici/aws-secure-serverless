@@ -1,5 +1,5 @@
 {
-  "$id": "https://christmas-markets.com/_v1_b2c_christmas-markets_user_{userId}:POST.json",
+  "$id": "_v1_b2c_christmas-markets_user_{userId}:POST.json",
   "type": "object",
   "properties": {
     "pathParameters": {
@@ -30,8 +30,7 @@
       },
       "required": ["marketName", "marketDescription", "marketAveragePrice", "city"],
       "additionalProperties": false
-    },
-    "required": ["pathParameters", "requestBody"],
-    "additionalProperties": false
-  }
+    }
+  },
+  "required": ["pathParameters", "requestBody"]
 }

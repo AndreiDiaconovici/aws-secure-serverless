@@ -18,33 +18,29 @@ export async function dispatcher(transformedEvent: InputModels.Input): Promise<{
   const validator = ValidatorService.getInstance()
   const API = `${transformedEvent.path}:${transformedEvent.httpMethod}`
 
-  const resultValidation = await validator.validate(transformedEvent, API)
-  if (resultValidation) {
-    switch (API) {
-      case Endpoints.B2B_GET_CHRISTMAS_MARKETS: {
-        return await christmasMarketService.b2bGetChristmasMarkets(transformedEvent as InputModels.B2BGetMarketsByCity)
-      }
-      case Endpoints.B2B_PATCH_CHRISTMAS_MARKETS: {
-        return await christmasMarketService.b2bApproveChristmasMarket(transformedEvent as InputModels.B2BApproveMarket)
-      }
-      case Endpoints.B2C_GET_CHRISTMAS_MARKET: {
-        return await christmasMarketService.b2cGetChristmasMarkets(transformedEvent as InputModels.B2CGetMarket)
-      }
-      case Endpoints.B2C_POST_CHRISTMAS_MARKET: {
-        return await christmasMarketService.b2cCreateChristmasMarket(transformedEvent as InputModels.B2CCreateMarket)
-      }
-      case Endpoints.B2C_PATCH_CHRISTMAS_MARKET: {
-        return await christmasMarketService.b2cUpdateChristmasMarket(transformedEvent as InputModels.B2CUpdateMarket)
-      }
-      case Endpoints.B2C_DELETE_CHRISTMAS_MARKET: {
-        return await christmasMarketService.b2cDeleteChristmasMarket(transformedEvent as InputModels.B2CDeleteMarket)
-      }
-      default: {
-        logger.error(`Method not implemented! - ${transformedEvent.path}:${transformedEvent.httpMethod}`)
-        throw new Error(JSON.stringify({ message: 'Method not implemented!', statusCode: 501 }))
-      }
+  await validator.validate(transformedEvent, API)
+  switch (API) {
+    case Endpoints.B2B_GET_CHRISTMAS_MARKETS: {
+      return await christmasMarketService.b2bGetChristmasMarkets(transformedEvent as InputModels.B2BGetMarketsByCity)
     }
-  } else {
-    throw new Error(JSON.stringify({ message: 'Method not implemented!', statusCode: 400 }))
+    case Endpoints.B2B_PATCH_CHRISTMAS_MARKETS: {
+      return await christmasMarketService.b2bApproveChristmasMarket(transformedEvent as InputModels.B2BApproveMarket)
+    }
+    case Endpoints.B2C_GET_CHRISTMAS_MARKET: {
+      return await christmasMarketService.b2cGetChristmasMarkets(transformedEvent as InputModels.B2CGetMarket)
+    }
+    case Endpoints.B2C_POST_CHRISTMAS_MARKET: {
+      return await christmasMarketService.b2cCreateChristmasMarket(transformedEvent as InputModels.B2CCreateMarket)
+    }
+    case Endpoints.B2C_PATCH_CHRISTMAS_MARKET: {
+      return await christmasMarketService.b2cUpdateChristmasMarket(transformedEvent as InputModels.B2CUpdateMarket)
+    }
+    case Endpoints.B2C_DELETE_CHRISTMAS_MARKET: {
+      return await christmasMarketService.b2cDeleteChristmasMarket(transformedEvent as InputModels.B2CDeleteMarket)
+    }
+    default: {
+      logger.error(`Method not implemented! - ${transformedEvent.path}:${transformedEvent.httpMethod}`)
+      throw new Error(JSON.stringify({ message: 'Method not implemented!', statusCode: 501 }))
+    }
   }
 }

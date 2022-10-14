@@ -102,7 +102,7 @@ export class DynamoDBService {
   public async queryItemByPartitionKey(keyName: string, keyValue: string): Promise<AWS.DynamoDB.DocumentClient.ItemList> {
     const params = {
       TableName: this.dynamoDBTable,
-      KeyConditionExpression: `${keyName} = :${keyName}`,
+      KeyConditionExpression: `#${keyName} = :${keyName}`,
       ExpressionAttributeNames: {
         [`#${keyName}`]: keyName
       },

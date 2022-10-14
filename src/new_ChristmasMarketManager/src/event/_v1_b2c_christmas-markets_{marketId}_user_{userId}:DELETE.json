@@ -1,5 +1,5 @@
 {
-  "$id": "https://christmas-markets.com/_v1_b2c_christmas-markets_{marketId}_user_{userId}:DELETE.json",
+  "$id": "_v1_b2c_christmas-markets_{marketId}_user_{userId}:DELETE.json",
   "type": "object",
   "properties": {
     "pathParameters": {
@@ -14,8 +14,7 @@
       },
       "required": ["userId", "marketId"],
       "additionalProperties": false
-    },
-    "required": ["pathParameters"],
-    "additionalProperties": false
-  }
+    }
+  },
+  "required": ["pathParameters"]
 }

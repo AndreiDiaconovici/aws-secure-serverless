@@ -17,7 +17,7 @@ const handler = async (event: APIGatewayEvent, _context: Context): Promise<any> 
     const transformedEvent: InputModels.Input = {
       pathParameters: event.pathParameters,
       queryParameters: event.queryStringParameters,
-      requestBody: event.body,
+      requestBody: event.body !== null ? JSON.parse(event.body) : null,
       httpMethod: event.httpMethod,
       path: event.resource
     }
@@ -27,13 +27,14 @@ const handler = async (event: APIGatewayEvent, _context: Context): Promise<any> 
     response = await dispatcher(transformedEvent)
   } catch (error: any) {
     logger.error(error)
+    const errorObject = JSON.parse(error.message)
     response = {
-      statusCode: error.statusCode,
-      body: error.message
+      statusCode: errorObject.statusCode,
+      body: errorObject.message
     }
   }
 
-  logger.info(`${LOG_PREFIX} #LAMBDA_END#`)
+  logger.info(`${LOG_PREFIX} #LAMBDA_END#`, response)
   return response
 }
 

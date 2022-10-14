@@ -1,5 +1,5 @@
 {
-  "$id": "https://christmas-markets.com/_v1_b2c_christmas-markets_user_{userId}:GET.json",
+  "$id": "_v1_b2c_christmas-markets_user_{userId}:GET.json",
   "type": "object",
   "properties": {
     "pathParameters": {
@@ -11,8 +11,7 @@
       },
       "required": ["userId"],
       "additionalProperties": false
-    },
-    "required": ["pathParameters"],
-    "additionalProperties": false
-  }
+    }
+  },
+  "required": ["pathParameters"]
 }

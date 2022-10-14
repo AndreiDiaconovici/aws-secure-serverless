@@ -1,5 +1,5 @@
 {
-  "$id": "https://christmas-markets.com/_v1_b2b_christmas-markets_city_{city}:GET.json",
+  "$id": "_v1_b2b_christmas-markets_city_{city}:GET.json",
   "type": "object",
   "properties": {
     "pathParameters": {
@@ -11,8 +11,7 @@
       },
       "required": ["city"],
       "additionalProperties": false
-    },
-    "required": ["pathParameters"],
-    "additionalProperties": false
-  }
+    }
+  },
+  "required": ["pathParameters"]
 }

@@ -1,5 +1,5 @@
 {
-  "$id": "https://christmas-markets.com/_v1_b2b_christmas-markets_{marketId}_user_{userId}:PATCH.json",
+  "$id": "_v1_b2b_christmas-markets_{marketId}_user_{userId}:PATCH.json",
   "type": "object",
   "properties": {
     "pathParameters": {
@@ -24,8 +24,7 @@
       },
       "required": ["approved"],
       "additionalProperties": false
-    },
-    "required": ["pathParameters", "requestBody"],
-    "additionalProperties": false
-  }
+    }
+  },
+  "required": ["pathParameters", "requestBody"]
 }
