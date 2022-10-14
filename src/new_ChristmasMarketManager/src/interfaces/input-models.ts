@@ -15,6 +15,9 @@ export interface B2CGetMarket extends Input {
 
 // B2C Create Market
 export interface B2CCreateMarket extends Input {
+  pathParameters: {
+    userId: string
+  }
   requestBody: RequestBodyB2CreateMarket
 }
 
@@ -29,6 +32,10 @@ export interface RequestBodyB2CreateMarket {
 export type RequestBodyB2CUpdateMarket = Omit<RequestBodyB2CreateMarket, 'city'>
 
 export interface B2CUpdateMarket extends Input {
+  pathParameters: {
+    userId: string
+    marketId: string
+  }
   requestBody: RequestBodyB2CUpdateMarket
 }
 
@@ -42,6 +49,10 @@ export interface B2CDeleteMarket extends Input {
 
 // B2B Approve Market
 export interface B2BApproveMarket extends Input {
+  pathParameters: {
+    userId: string
+    marketId: string
+  }
   requestBody: {
     approved: boolean
   }

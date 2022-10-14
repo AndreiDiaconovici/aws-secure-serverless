@@ -26,6 +26,7 @@ const handler = async (event: APIGatewayEvent, _context: Context): Promise<any> 
     // Dispatch Service
     response = await dispatcher(transformedEvent)
   } catch (error: any) {
+    logger.error(error)
     response = {
       statusCode: error.statusCode,
       body: error.message

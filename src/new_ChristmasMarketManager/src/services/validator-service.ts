@@ -18,10 +18,11 @@ export class ValidatorService {
 
   public async validate(obj: object, schemaPath: string): Promise<boolean> {
     // Check if schema is already present by doing a get
+    schemaPath = schemaPath.replace(/\//g, '_') + '.json'
     const ajvCachedSchema = this.ajvInstance.getSchema(schemaPath)
     // Get schema if present, add it if not
     if (ajvCachedSchema === undefined) {
-      const schema = await import(schemaPath)
+      const schema = await import('../event' + schemaPath)
       this.ajvInstance.addSchema(schema, schemaPath)
       // Recall function in order to validate the object
       await this.validate(obj, schemaPath)

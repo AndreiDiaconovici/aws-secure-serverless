@@ -1,6 +1,6 @@
-.PHONY: build-newChristmasMarketManager
+.PHONY: build-ManagerLambdaFunction
 
-build-newChristmasMarketManager:
+build-ManagerLambdaFunction:
 	rm -rf node_modules
 	rm -rf package-lock.json
 	npm install

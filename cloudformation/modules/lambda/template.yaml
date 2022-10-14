@@ -46,6 +46,8 @@ Resources:
       AutoPublishAlias: !Ref LambdaAliasName
       MemorySize: !Ref LambdaMemorySize
       Timeout: !Ref LambdaTimeout
+    Metadata: # Manage lambda build
+      BuildMethod: makefile
 Outputs:
   ManagerLambdaFunctionArn:
     Value: !GetAtt ManagerLambdaFunction.Arn
