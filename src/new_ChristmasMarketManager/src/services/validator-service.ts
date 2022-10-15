@@ -17,11 +17,6 @@ export class ValidatorService {
   }
 
   public async validate(obj: object, schemaPath: string): Promise<void> {
-    if (schemaPath === 'undefined:undefined') {
-      logger.error('ValidatorService | validate | schemaPath cannot be null')
-      throw Error(JSON.stringify({ message: 'SchemaPath cannot be null', statusCode: 400 }))
-    }
-
     // Check if schema is already present by doing a get
     schemaPath = schemaPath.replace(/\//g, '_')
     const validateSchema = this.ajvInstance.getSchema(schemaPath)
