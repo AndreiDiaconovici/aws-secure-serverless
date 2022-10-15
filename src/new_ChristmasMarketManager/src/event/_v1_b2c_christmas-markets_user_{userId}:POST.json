@@ -1,0 +1,36 @@
+{
+  "$id": "_v1_b2c_christmas-markets_user_{userId}:POST.json",
+  "type": "object",
+  "properties": {
+    "pathParameters": {
+      "type": "object",
+      "properties": {
+        "userId": {
+          "type": "string"
+        }
+      },
+      "required": ["userId"],
+      "additionalProperties": false
+    },
+    "requestBody": {
+      "type": "object",
+      "properties": {
+        "marketName": {
+          "type": "string"
+        },
+        "marketDescription": {
+          "type": "string"
+        },
+        "marketAveragePrice": {
+          "type": "number"
+        },
+        "city": {
+          "type": "string"
+        }
+      },
+      "required": ["marketName", "marketDescription", "marketAveragePrice", "city"],
+      "additionalProperties": false
+    }
+  },
+  "required": ["pathParameters", "requestBody"]
+}

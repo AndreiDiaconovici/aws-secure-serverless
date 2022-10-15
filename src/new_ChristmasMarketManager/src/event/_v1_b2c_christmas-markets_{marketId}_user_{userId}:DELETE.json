@@ -1,0 +1,20 @@
+{
+  "$id": "_v1_b2c_christmas-markets_{marketId}_user_{userId}:DELETE.json",
+  "type": "object",
+  "properties": {
+    "pathParameters": {
+      "type": "object",
+      "properties": {
+        "userId": {
+          "type": "string"
+        },
+        "marketId": {
+          "type": "string"
+        }
+      },
+      "required": ["userId", "marketId"],
+      "additionalProperties": false
+    }
+  },
+  "required": ["pathParameters"]
+}
