@@ -43,7 +43,7 @@ Resources:
     Type: AWS::Serverless::Function
     Properties:
       # Runtime: nodejs14.x
-      Handler: handler.handler
+      Handler: src/handler.handler
       # To run with Deno
       Runtime: provided.al2
       Layers:

@@ -1,4 +1,4 @@
-import { Ajv } from "https://deno.land/x/deno_run@0.3.0/deps.ts";
+import Ajv from 'https://esm.sh/ajv@8.6.1';
 import { logger } from '../utils/index.ts'
 export class ValidatorService {
   private static instance: undefined | ValidatorService
@@ -23,7 +23,9 @@ export class ValidatorService {
     // Get schema if present, add it if not
     if (validateSchema === undefined) {
       try {
-        const schema = await import('../event/' + schemaPath + '.json')
+        const schema = await import('../event/' + schemaPath + '.json', {
+          assert: { type: "json" },
+        })
         this.ajvInstance.addSchema(schema, schemaPath)
         // Recall function in order to validate the object
         await this.validate(obj, schemaPath)

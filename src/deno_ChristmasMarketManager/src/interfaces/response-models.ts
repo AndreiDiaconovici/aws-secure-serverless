@@ -4,7 +4,7 @@ export interface ChristmasMarket {
   marketName: string
   marketDescription: string
   marketAveragePrice: number
-  markerApproved: boolean
+  marketApproved: boolean
   city: string
 }
 
