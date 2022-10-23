@@ -29,7 +29,7 @@ Resources:
         LambdaDescription: "ChristmasMarket manager handles the CRUD APIs of B2C & B2B"
         LambdaTimeout: 30
         LambdaMemorySize: 128
-        LambdaSourceCodePath: "../../../src/new_ChristmasMarketManager"
+        LambdaSourceCodePath: "../../../src/deno_ChristmasMarketManager"
         LambdaAliasName: "dev"
         ExecutionRoleArn: !GetAtt IAM.Outputs.LambdaExecutionRoleArn
         DynamoDBTableName: "CHRISTMAS_MARKET_DATA_STORE"
