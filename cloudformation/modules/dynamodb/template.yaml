@@ -47,7 +47,7 @@ Resources:
               AttributeName: !Ref DynamoDBGSIName
               KeyType: "HASH"
           Projection:
-            ProjectionType: KEYS_ONLY
+            ProjectionType: ALL
           ProvisionedThroughput: 
             ReadCapacityUnits: !Ref DynamoDBRCU
             WriteCapacityUnits: !Ref DynamoDBWCU

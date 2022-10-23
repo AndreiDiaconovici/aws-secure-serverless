@@ -1,0 +1,17 @@
+{
+  "$id": "_v1_b2b_christmas-markets_city_{city}:GET.json",
+  "type": "object",
+  "properties": {
+    "pathParameters": {
+      "type": "object",
+      "properties": {
+        "city": {
+          "type": "string"
+        }
+      },
+      "required": ["city"],
+      "additionalProperties": false
+    }
+  },
+  "required": ["pathParameters"]
+}

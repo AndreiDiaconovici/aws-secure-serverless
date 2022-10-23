@@ -1,0 +1,30 @@
+{
+  "$id": "_v1_b2b_christmas-markets_{marketId}_user_{userId}:PATCH.json",
+  "type": "object",
+  "properties": {
+    "pathParameters": {
+      "type": "object",
+      "properties": {
+        "userId": {
+          "type": "string"
+        },
+        "marketId": {
+          "type": "string"
+        }
+      },
+      "required": ["userId", "marketId"],
+      "additionalProperties": false
+    },
+    "requestBody": {
+      "type": "object",
+      "properties": {
+        "approved": {
+          "type": "boolean"
+        }
+      },
+      "required": ["approved"],
+      "additionalProperties": false
+    }
+  },
+  "required": ["pathParameters", "requestBody"]
+}

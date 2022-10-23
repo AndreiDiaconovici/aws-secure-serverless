@@ -31,11 +31,23 @@ Parameters:
     Type: String
     Description: "DynamoDB table name"
 Resources:
+
+  Deno:
+    Type: AWS::Serverless::Application
+    Properties:
+      Location:
+        ApplicationId: arn:aws:serverlessrepo:us-east-1:390065572566:applications/deno
+        SemanticVersion: 1.26.2
+        
   ManagerLambdaFunction:
     Type: AWS::Serverless::Function
     Properties:
-      Runtime: nodejs14.x
+      # Runtime: nodejs14.x
       Handler: src/handler.handler
+      # To run with Deno
+      Runtime: provided.al2
+      Layers:
+        - !GetAtt Deno.Outputs.LayerArn
       Environment:
         Variables:
           DynamoDBTableName: !Ref DynamoDBTableName
